@@ -32,7 +32,7 @@ def login():
     if form.validate_on_submit():
         user = User.query.filter_by(phone_number=form.phonenumber.data).first()
         if user:
-            if user.confirmed == False:
+            if user.confirmed == True:
                 flash('Account email not confimed! please check your email for confimation link!','danger')
                 redirect(url_for('home'))
             else:
@@ -106,12 +106,12 @@ def register():
     form = RegistrationForm()
     if form.validate_on_submit():
         
-        email = form.email.data
+        '''email = form.email.data
         token = s.dumps(form.email.data, salt='email-confirm')
         msg = Message('Confirm Email', sender='simonkinuhia002@gmail.com', recipients=[form.email.data])
         link = url_for('confirm_email', token=token,email=email, _external=True)
         msg.body = 'Your link is {}'.format(link)
-        mail.send(msg)
+        mail.send(msg)'''
 
         hashed_password = bcrypt.generate_password_hash(form.password.data).decode('utf-8')
         username = form.first_name.data + form.last_name.data
@@ -123,11 +123,11 @@ def register():
     return render_template('register.html', title='Register', form=form)
 
 
-@app.route('/confirm_email/<token>/<Email>')
-def confirm_email(token,Email):
+@app.route('/confirm_email/<token>/<email>')
+def confirm_email(token,email):
     try:
         s.loads(token, salt='email-confirm', max_age=3600)
-        user = User.query.filter_by(email=Email).first()
+        user = User.query.filter_by(email=email).first()
         if user:
             user.confirmed = True
             database.session.commit()

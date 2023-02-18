@@ -32,7 +32,7 @@ class User(database.Model, UserMixin):
         return User.query.get(user_id)
 
     def __repr__(self):
-        return f"User('{self.username}', '{self.email}', '{self.image_file}')"
+        return f"User('{self.username}', '{self.email}', '{self.phone_number}')"
 
 class Post(database.Model):
     id = database.Column(database.Integer, primary_key=True)
